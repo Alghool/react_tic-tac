@@ -12,7 +12,8 @@ import Board from './Board';
         }],
         stepNumber: 0,
         xIsNext: true,
-        sortDesc: false
+        sortDesc: false,
+        drawGame: false,
       }
     }
 
@@ -23,7 +24,7 @@ import Board from './Board';
       const squares = current.squares.slice();
       const winner = calculateWinner(squares);
       
-      if(winner || squares[i]) return;
+      if(winner || squares[i] || this.state.drawGame) return;
       squares[i] = this.state.xIsNext? 'X': 'O';
       this.setState({ 
         history: history.concat([{squares: squares, thisSquare: i}]),
@@ -51,10 +52,16 @@ import Board from './Board';
       const winner = calculateWinner(current.squares);
 
       let status;
+      let winningLine;
       if(winner){
-        status = "Winner is " + winner;
-      }else{
+        status = "Winner is " + winner.player;
+        winningLine = winner.line;
+      }else if(current.squares.includes(null)){
         status = 'Next player: '+ (this.state.xIsNext? 'X' : 'O');
+        winningLine = null
+      }else{
+        status = 'Game ends with draw';
+        winningLine = null    
       }
 
       const moves = history.map((step, move)=>{
@@ -75,7 +82,7 @@ import Board from './Board';
       return (
         <div className="game">
           <div className="game-board">
-            <Board squares={current.squares} onClick={(i)=>this.handleClick(i)}/>
+            <Board squares={current.squares} line={winningLine} onClick={(i)=>this.handleClick(i)}/>
           </div>
           <div className="game-info">
             <div className="status">{status}</div>
@@ -102,7 +109,7 @@ import Board from './Board';
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return squares[a];
+        return {player:squares[a], line: lines[i]};
       }
     }
     return null;

@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 export default function Square(props){
-    
-    return (
-      <button className="square" 
-      onClick={props.onClick}>
+    const myClassName = 'square ' + (props.winningClass);
+
+    return (    
+      <button className={myClassName} 
+        onClick={props.onClick}>
         {props.value}
       </button>
     );

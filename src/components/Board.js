@@ -5,9 +5,16 @@ import Square from './Square';
   export default class Board extends React.Component {
 
     renderSquare(i) {
+        let winningClass = ''
+        if(this.props.line){
+            if(this.props.line.includes(i)){
+                winningClass = 'winner';
+            }
+        }
       return <Square 
         value = {this.props.squares[i]} 
         onClick= {() => this.props.onClick(i)}
+        winningClass = {winningClass}
       />;
     }
 
