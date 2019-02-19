@@ -53,7 +53,8 @@ import Board from './Board';
 
       const moves = history.map((step, move)=>{
         const location = getSquareLocation(step.thisSquare);
-        const desc = move? 'move: ' + move + '- x: ' + location[0] + ' y: '+ location[1] + ' - player: ' + step.squares[step.thisSquare]  : 'Go To Start';
+        let desc = move? 'move: ' + move + '- x: ' + location[0] + ' y: '+ location[1] + ' - player: ' + step.squares[step.thisSquare]  : 'Go To Start';
+        desc = (move === this.state.stepNumber)? <b>{desc}</b> : desc;
         return (
           <li key={move}>
             <button onClick={()=>this.jumpTo(move)} > {desc} </button>
