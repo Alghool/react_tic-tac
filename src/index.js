@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { array } from 'prop-types';
 
 function Square(props){
     
@@ -54,16 +53,10 @@ function Square(props){
           squares:Array(9).fill(null),
         }],
         stepNumber: 0,
-        xIsNest: true,
+        xIsNext: true,
       }
     }
 
-    jumpTo(step) {
-      this.setState({
-        stepNumber: step,
-        xIsNext: (step % 2) === 0,
-      });
-    }
 
     handleClick(i){
       const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -72,11 +65,19 @@ function Square(props){
       const winner = calculateWinner(squares);
       
       if(winner || squares[i]) return;
-      squares[i] = this.state.xIsNest? 'X': 'O';
+      squares[i] = this.state.xIsNext? 'X': 'O';
       this.setState({ 
         history: history.concat([{squares: squares}]),
-        xIsNest: !this.state.xIsNest,
-        stepNumber : history.length
+        stepNumber : history.length,
+        xIsNext: !this.state.xIsNext
+      });
+    }
+
+
+    jumpTo(step) {
+      this.setState({
+        stepNumber: step,
+        xIsNext: (step % 2) === 0,
       });
     }
 
@@ -89,7 +90,7 @@ function Square(props){
       if(winner){
         status = "Winner is " + winner;
       }else{
-        status = 'Next player: '+ (this.state.xIsNest? 'X' : 'O');
+        status = 'Next player: '+ (this.state.xIsNext? 'X' : 'O');
       }
 
       const moves = history.map((step, move)=>{
