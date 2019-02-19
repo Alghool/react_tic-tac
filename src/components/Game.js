@@ -8,6 +8,7 @@ import Board from './Board';
       this.state ={
         history: [{
           squares:Array(9).fill(null),
+          thisSquare: null
         }],
         stepNumber: 0,
         xIsNext: true,
@@ -24,7 +25,7 @@ import Board from './Board';
       if(winner || squares[i]) return;
       squares[i] = this.state.xIsNext? 'X': 'O';
       this.setState({ 
-        history: history.concat([{squares: squares}]),
+        history: history.concat([{squares: squares, thisSquare: i}]),
         stepNumber : history.length,
         xIsNext: !this.state.xIsNext
       });
@@ -51,7 +52,8 @@ import Board from './Board';
       }
 
       const moves = history.map((step, move)=>{
-        const desc = move? 'Go To move: ' + move : 'Go To Start';
+        const location = getSquareLocation(step.thisSquare);
+        const desc = move? 'move: ' + move + '- x: ' + location[0] + ' y: '+ location[1] + ' - player: ' + step.squares[step.thisSquare]  : 'Go To Start';
         return (
           <li key={move}>
             <button onClick={()=>this.jumpTo(move)} > {desc} </button>
@@ -92,4 +94,14 @@ import Board from './Board';
       }
     }
     return null;
+  }
+
+  function getSquareLocation(i){
+      const locations = [
+            [0,0], [0,1], [0,2],
+            [1,0], [1,1], [1,2], 
+            [2,0], [2,1], [2,2]
+        ]
+
+        return locations[i];
   }
