@@ -12,6 +12,7 @@ import Board from './Board';
         }],
         stepNumber: 0,
         xIsNext: true,
+        sortDesc: false
       }
     }
 
@@ -31,7 +32,6 @@ import Board from './Board';
       });
     }
 
-
     jumpTo(step) {
       this.setState({
         stepNumber: step,
@@ -39,8 +39,14 @@ import Board from './Board';
       });
     }
 
+    resort(){
+        this.setState({
+            sortDesc: !this.state.sortDesc,
+        })
+    }
+
     render() {
-      const history = this.state.history;
+      let history = this.state.history;
       const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
 
@@ -62,6 +68,10 @@ import Board from './Board';
         ) 
       });
 
+      if(this.state.sortDesc){
+        moves.reverse();
+    } 
+
       return (
         <div className="game">
           <div className="game-board">
@@ -69,6 +79,7 @@ import Board from './Board';
           </div>
           <div className="game-info">
             <div className="status">{status}</div>
+            <p>steps history <button onClick={()=>this.resort()}>sort {this.state.sortDesc? 'DESC': 'ASC'}</button></p>
             <ol>{moves}</ol>
           </div>
         </div>
